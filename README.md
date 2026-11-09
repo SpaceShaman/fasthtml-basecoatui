@@ -165,7 +165,7 @@ Generate assets first when building from a Git checkout; the build stops if they
 
 ### Automated releases
 
-A daily [Release workflow](.github/workflows/release.yml) checks `basecoat-css` on npm. A new stable npm version triggers regeneration, wheel tests, and publication to PyPI. GitHub supplies only the matching source tag; it does not determine the released version.
+A weekly [Release workflow](.github/workflows/release.yml) checks `basecoat-css` on npm. A new stable npm version triggers regeneration, wheel tests, and publication to PyPI. GitHub supplies only the matching source tag; it does not determine the released version.
 
 Configure PyPI Trusted Publishing for repository `SpaceShaman/fasthtml-basecoatui`, workflow `release.yml`, and environment `pypi`. The workflow needs permission to commit generated files and version updates to the default branch.
 
