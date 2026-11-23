@@ -42,6 +42,29 @@ def test_original_sources_preserve_component_names(slug, names):
     assert [item.name for item in parsed(slug)] == names
 
 
+def test_html_structure_code_block_preserves_documented_toast_components():
+    mdx = '''
+### HTML structure
+
+```html
+<li class="toast">
+  <div class="toast-content" role="status">Saved</div>
+</li>
+```
+
+## Examples
+
+<div class="toast-example">Example only</div>
+'''
+    css = parse_css(".toast {} .toast-content {} .toast-example {}")
+
+    toast, content = parse_component(mdx, css, slug="toast")
+
+    assert (toast.name, toast.tag) == ("Toast", "li")
+    assert (content.name, content.tag) == ("ToastContent", "div")
+    assert content.defaults == {"role": "status"}
+
+
 def test_button_typed_options_and_html():
     (button,) = parsed("button")
     assert "data-icon" not in button.options

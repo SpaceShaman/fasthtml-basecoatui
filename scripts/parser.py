@@ -24,6 +24,7 @@ GROUP_RULES = {"layer", "media", "supports", "container", "scope"}
 STRUCTURE = re.compile(
     r"^#{2,6}\s+HTML structure\s*\n(.*?)(?=^#{1,6}\s|\Z)", re.M | re.S | re.I
 )
+HTML_BLOCK = re.compile(r"^[ \t]*```html[ \t]*\n(.*?)^[ \t]*```[ \t]*$", re.M | re.S)
 DATA_VALUE = re.compile(r"""data-([\w-]+)=["']([^"']+)["']""")
 
 
@@ -199,23 +200,27 @@ def structure_components(section, css, slug):
                     documented_options(dt),
                 )
 
+    for markup in HTML_BLOCK.findall(section):
+        for element, css_class in matching_elements(markup, css, slug):
+            yield component(element, css_class, slug, css)
+
+
+def matching_elements(markup, css, slug):
+    soup = BeautifulSoup(markup, "html.parser")
+    for element in soup.find_all(class_=True):
+        for css_class in element.get("class", []):
+            if css_class in css and belongs(slug, css_class):
+                yield element, css_class
+
 
 def parse_component(mdx, css, *, slug):
     section = STRUCTURE.search(mdx)
     found = {}
     for item in structure_components(section[1] if section else "", css, slug):
         found.setdefault(item.name, item)
-    examples = BeautifulSoup(mdx, "html.parser")
-    for element in examples.find_all(class_=True):
-        for css_class in element.get("class", []):
-            if css_class not in css or not belongs(slug, css_class):
-                continue
-            if (
-                section
-                and css_class != slug
-                and slug not in {"checkbox", "radio-group"}
-            ):
-                continue
-            item = component(element, css_class, slug, css)
-            found.setdefault(item.name, item)
+    for element, css_class in matching_elements(mdx, css, slug):
+        if section and css_class != slug and slug not in {"checkbox", "radio-group"}:
+            continue
+        item = component(element, css_class, slug, css)
+        found.setdefault(item.name, item)
     return sorted(found.values(), key=lambda item: item.name)
