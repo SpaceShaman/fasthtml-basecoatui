@@ -31,7 +31,7 @@ def main():
     if tuple(map(int, latest.split("."))) > tuple(
         map(int, current.split(".post")[0].split("."))
     ):
-        subprocess.run(["uv", "version", latest, "--frozen", "--no-sync"], check=True)
+        subprocess.run(["uv", "version", latest, "--frozen"], check=True)
         current = latest
     expected = {
         f"fasthtml_basecoatui-{current}-py3-none-any.whl",
