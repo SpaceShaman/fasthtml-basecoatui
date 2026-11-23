@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.1",
   "styles": [
     "luma",
     "lyra",
@@ -14,16 +14,21 @@
     "Accordion",
     "Alert",
     "AlertDialog",
+    "Attachment",
     "Avatar",
     "AvatarBadge",
     "AvatarGroup",
     "Badge",
     "Breadcrumb",
+    "Bubble",
+    "BubbleGroup",
     "Button",
     "ButtonGroup",
     "Card",
     "CardAction",
+    "Carousel",
     "Checkbox",
+    "CodeBlock",
     "Combobox",
     "ComboboxTriggerIcon",
     "Command",
@@ -36,15 +41,20 @@
     "Fieldset",
     "Input",
     "InputGroup",
+    "InputOtp",
     "Item",
     "ItemGroup",
     "Kbd",
     "Label",
+    "Marker",
+    "Message",
+    "MessageGroup",
     "NativeSelect",
     "Popover",
     "Progress",
     "Radio",
     "Select",
+    "Sheet",
     "Sidebar",
     "Skeleton",
     "Slider",
@@ -54,7 +64,9 @@
     "Tabs",
     "Textarea",
     "Toast",
-    "ToastContent"
+    "ToastContent",
+    "Trace",
+    "TraceLine"
   ],
   "helpers": [
     "Pagination",
@@ -68,6 +80,12 @@
     "tooltip": "data-tooltip"
   },
   "skipped": [
-    "chart"
+    "aspect-ratio",
+    "chart",
+    "collapsible",
+    "data-table",
+    "direction",
+    "toggle-group",
+    "toggle"
   ]
 }

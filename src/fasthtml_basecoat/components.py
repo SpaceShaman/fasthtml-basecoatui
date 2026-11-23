@@ -4,7 +4,7 @@ from typing import Literal
 
 from fasthtml.components import ft_html
 
-BASECOAT_VERSION = '1.1.0'
+BASECOAT_VERSION = '1.2.1'
 STYLES = ('luma', 'lyra', 'maia', 'mira', 'nova', 'rhea', 'sera', 'vega')
 Style = Literal['luma', 'lyra', 'maia', 'mira', 'nova', 'rhea', 'sera', 'vega']
 
@@ -12,16 +12,21 @@ __all__ = [
     'Accordion',
     'Alert',
     'AlertDialog',
+    'Attachment',
     'Avatar',
     'AvatarBadge',
     'AvatarGroup',
     'Badge',
     'Breadcrumb',
+    'Bubble',
+    'BubbleGroup',
     'Button',
     'ButtonGroup',
     'Card',
     'CardAction',
+    'Carousel',
     'Checkbox',
+    'CodeBlock',
     'Combobox',
     'ComboboxTriggerIcon',
     'Command',
@@ -34,15 +39,20 @@ __all__ = [
     'Fieldset',
     'Input',
     'InputGroup',
+    'InputOtp',
     'Item',
     'ItemGroup',
     'Kbd',
     'Label',
+    'Marker',
+    'Message',
+    'MessageGroup',
     'NativeSelect',
     'Popover',
     'Progress',
     'Radio',
     'Select',
+    'Sheet',
     'Sidebar',
     'Skeleton',
     'Slider',
@@ -53,6 +63,8 @@ __all__ = [
     'Textarea',
     'Toast',
     'ToastContent',
+    'Trace',
+    'TraceLine',
 ]
 
 
@@ -94,6 +106,26 @@ def AlertDialog(
 ):
     'Native modal dialog. Add aria-labelledby and aria-describedby when title and description are present. Use data-size="sm" for the compact upstream size.'
     classes = ' '.join(filter(None, ('alert-dialog', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def Attachment(
+    *children,
+    orientation: Literal['vertical'] | None = None,
+    size: Literal['default', 'sm', 'xs'] | None = None,
+    state: Literal['error', 'idle'] | None = None,
+    cls: str = "",
+    tag: str = 'li',
+    **attrs,
+):
+    'Basecoat Attachment.'
+    if orientation is not None:
+        attrs['data-orientation'] = _option('orientation', orientation, ('vertical',))
+    if size is not None:
+        attrs['data-size'] = _option('size', size, ('default', 'sm', 'xs'))
+    if state is not None:
+        attrs['data-state'] = _option('state', state, ('error', 'idle'))
+    classes = ' '.join(filter(None, ('attachment', cls)))
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
@@ -158,6 +190,35 @@ def Breadcrumb(
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
+def Bubble(
+    *children,
+    align: Literal['end'] | None = None,
+    variant: Literal['default', 'destructive', 'ghost', 'muted', 'outline', 'secondary', 'tinted'] | None = None,
+    cls: str = "",
+    tag: str = 'div',
+    **attrs,
+):
+    'Basecoat Bubble.'
+    if align is not None:
+        attrs['data-align'] = _option('align', align, ('end',))
+    if variant is not None:
+        attrs['data-variant'] = _option('variant', variant, ('default', 'destructive', 'ghost', 'muted', 'outline', 'secondary', 'tinted'))
+    classes = ' '.join(filter(None, ('bubble', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def BubbleGroup(
+    *children,
+    cls: str = "",
+    tag: str = 'ol',
+    **attrs,
+):
+    'Basecoat BubbleGroup.'
+    attrs.setdefault('role', 'list')
+    classes = ' '.join(filter(None, ('bubble-group', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
 def Button(
     *children,
     size: Literal['default', 'icon', 'icon-lg', 'icon-sm', 'icon-xs', 'lg', 'sm', 'xs'] | None = None,
@@ -215,6 +276,21 @@ def CardAction(
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
+def Carousel(
+    *children,
+    orientation: Literal['vertical'] | None = None,
+    cls: str = "",
+    tag: str = 'div',
+    **attrs,
+):
+    'Basecoat Carousel.'
+    attrs.setdefault('role', 'region')
+    if orientation is not None:
+        attrs['data-orientation'] = _option('orientation', orientation, ('vertical',))
+    classes = ' '.join(filter(None, ('carousel', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
 def Checkbox(
     *children,
     cls: str = "",
@@ -224,6 +300,23 @@ def Checkbox(
     'Basecoat Checkbox.'
     attrs.setdefault('type', 'checkbox')
     classes = ' '.join(filter(None, ('input', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def CodeBlock(
+    *children,
+    size: Literal['sm'] | None = None,
+    variant: Literal['destructive'] | None = None,
+    cls: str = "",
+    tag: str = 'div',
+    **attrs,
+):
+    'Basecoat CodeBlock.'
+    if size is not None:
+        attrs['data-size'] = _option('size', size, ('sm',))
+    if variant is not None:
+        attrs['data-variant'] = _option('variant', variant, ('destructive',))
+    classes = ' '.join(filter(None, ('code-block', cls)))
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
@@ -370,6 +463,17 @@ def InputGroup(
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
+def InputOtp(
+    *children,
+    cls: str = "",
+    tag: str = 'div',
+    **attrs,
+):
+    'Basecoat InputOtp.'
+    classes = ' '.join(filter(None, ('input-otp', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
 def Item(
     *children,
     size: Literal['default', 'sm', 'xs'] | None = None,
@@ -418,6 +522,46 @@ def Label(
 ):
     'Basecoat Label.'
     classes = ' '.join(filter(None, ('label', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def Marker(
+    *children,
+    variant: Literal['border', 'separator'] | None = None,
+    cls: str = "",
+    tag: str = 'div',
+    **attrs,
+):
+    'Basecoat Marker.'
+    if variant is not None:
+        attrs['data-variant'] = _option('variant', variant, ('border', 'separator'))
+    classes = ' '.join(filter(None, ('marker', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def Message(
+    *children,
+    align: Literal['end'] | None = None,
+    cls: str = "",
+    tag: str = 'li',
+    **attrs,
+):
+    'Basecoat Message.'
+    if align is not None:
+        attrs['data-align'] = _option('align', align, ('end',))
+    classes = ' '.join(filter(None, ('message', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def MessageGroup(
+    *children,
+    cls: str = "",
+    tag: str = 'ol',
+    **attrs,
+):
+    'Basecoat MessageGroup.'
+    attrs.setdefault('role', 'list')
+    classes = ' '.join(filter(None, ('message-group', cls)))
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
@@ -475,6 +619,20 @@ def Select(
 ):
     'Select root. Add data-placeholder to show placeholder text when no value is selected. Supports data-close-on-select="true" for multiple select and data-format="object" for serialized object values.'
     classes = ' '.join(filter(None, ('select', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def Sheet(
+    *children,
+    side: Literal['bottom', 'left', 'right', 'top'] | None = None,
+    cls: str = "",
+    tag: str = 'dialog',
+    **attrs,
+):
+    'Basecoat Sheet.'
+    if side is not None:
+        attrs['data-side'] = _option('side', side, ('bottom', 'left', 'right', 'top'))
+    classes = ' '.join(filter(None, ('sheet', cls)))
     return ft_html(tag, *children, cls=classes, **attrs)
 
 
@@ -577,11 +735,17 @@ def Textarea(
 
 def Toast(
     *children,
+    category: Literal['error', 'loading'] | None = None,
+    toast_swipe: Literal['x'] | None = None,
     cls: str = "",
-    tag: str = 'div',
+    tag: str = 'li',
     **attrs,
 ):
-    'Toast item. Use data-category="success|info|warning|error" for category styling and data-duration to override the timeout in milliseconds. Use data-duration="-1" to keep it open.'
+    'Basecoat Toast.'
+    if category is not None:
+        attrs['data-category'] = _option('category', category, ('error', 'loading'))
+    if toast_swipe is not None:
+        attrs['data-toast-swipe'] = _option('toast_swipe', toast_swipe, ('x',))
     classes = ' '.join(filter(None, ('toast', cls)))
     return ft_html(tag, *children, cls=classes, **attrs)
 
@@ -592,6 +756,30 @@ def ToastContent(
     tag: str = 'div',
     **attrs,
 ):
-    'Content wrapper.'
+    'Basecoat ToastContent.'
+    attrs.setdefault('role', 'status')
     classes = ' '.join(filter(None, ('toast-content', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def Trace(
+    *children,
+    cls: str = "",
+    tag: str = 'ol',
+    **attrs,
+):
+    'Basecoat Trace.'
+    attrs.setdefault('role', 'list')
+    classes = ' '.join(filter(None, ('trace', cls)))
+    return ft_html(tag, *children, cls=classes, **attrs)
+
+
+def TraceLine(
+    *children,
+    cls: str = "",
+    tag: str = 'summary',
+    **attrs,
+):
+    'Basecoat TraceLine.'
+    classes = ' '.join(filter(None, ('trace-line', cls)))
     return ft_html(tag, *children, cls=classes, **attrs)
